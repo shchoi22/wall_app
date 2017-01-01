@@ -69,6 +69,17 @@ class UserResource(ModelResource):
         if form.is_valid():
             form.save()
             user = authenticate(username=username, password=password)
+
+            from django.core.mail import send_mail
+
+            send_mail(
+                'Welcome to Wall App',
+                'Thanks for signing up! You can now login and create new messages!',
+                'noreply@wallapp.com',
+                [username],
+                fail_silently=False,
+            )
+            
             return self.create_response(request, 200)
         else:
             return self.error_response(request, form.errors)

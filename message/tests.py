@@ -1,12 +1,7 @@
-import logging
 import json
 
-from django.test import TestCase, Client, override_settings
+from django.test import TestCase, Client
 from django.core import mail
-from django.conf import settings
-from django.core.urlresolvers import reverse
-
-from tastypie.exceptions import Unauthorized
 
 class AuthenticatedSessionApiTestCase(TestCase):
     def setUp(self):
@@ -16,8 +11,15 @@ class AuthenticatedSessionApiTestCase(TestCase):
             content_type='application/json')
         
         self.c.login(username="test@test.com", password="testing")
+    
+    def test_welcome_email(self):
+        self.assertEqual(len(mail.outbox), 1)
+        email = mail.outbox.pop()
 
-    def test_get_user_me(self):
+        self.assertEqual(email.subject, 'Welcome to Wall App')
+        self.assertEqual(email.to[0], 'test@test.com')
+
+    def test_create_message(self):
         response = self.c.post('/api/v1/messages/',
             data=json.dumps({"content": "testing"}),
             content_type='application/json')
