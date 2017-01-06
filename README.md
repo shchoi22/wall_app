@@ -1,6 +1,6 @@
 # Instructions on running the app locally:
 ## Django app server:
-1. `pip install -r requirements.txt`
+1. `pip install -r requirements/development.txt`
 2. `python manage.py migrate --settings=wall_app.settings.development`
 3. `python manage.py runserver --settings=wall_app.settings.development`
 
